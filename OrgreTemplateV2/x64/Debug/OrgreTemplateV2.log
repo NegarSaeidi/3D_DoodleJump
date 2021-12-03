@@ -1,4 +1,4 @@
-﻿  Source.cpp
+﻿  Game.cpp
 F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\OgreMain\Include\OgreAxisAlignedBox.h(66,17): warning C4251: 'Ogre::AxisAlignedBox::mMinimum': class 'Ogre::Vector<3,Ogre::Real>' needs to have dll-interface to be used by clients of class 'Ogre::AxisAlignedBox'
 F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\OgreMain\Include\OgrePrerequisites.h(254): message : see declaration of 'Ogre::Vector<3,Ogre::Real>'
 F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\OgreMain\Include\OgreAxisAlignedBox.h(67,17): warning C4251: 'Ogre::AxisAlignedBox::mMaximum': class 'Ogre::Vector<3,Ogre::Real>' needs to have dll-interface to be used by clients of class 'Ogre::AxisAlignedBox'
@@ -517,7 +517,7 @@ F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\Components\Bites\Include\OgreTrays.h(1
 F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\Components\Bites\Include\OgreTrays.h(189): message : see declaration of 'std::vector<OgreBites::Widget *,std::allocator<OgreBites::Widget *>>'
 F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\Components\Bites\Include\OgreTrays.h(1198,23): warning C4251: 'OgreBites::TrayManager::mCursorPos': class 'Ogre::Vector<2,Ogre::Real>' needs to have dll-interface to be used by clients of class 'OgreBites::TrayManager'
 F:\T163-Term5\Hooman-Engine\ogre-sdk-v2.1\OgreMain\Include\OgrePrerequisites.h(252): message : see declaration of 'Ogre::Vector<2,Ogre::Real>'
-C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\Source.cpp(243,12): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\Source.cpp(244,12): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\Source.cpp(287,10): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\Game.cpp(172,12): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\Game.cpp(173,12): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\Game.cpp(216,10): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   OrgreTemplateV2.vcxproj -> C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\DoodleJump3D_Ogre\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe

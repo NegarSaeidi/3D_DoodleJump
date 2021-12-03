@@ -23,7 +23,7 @@
     <ClCompile Include="..\Doodle.cpp" />
     <ClCompile Include="..\Platform.cpp" />
     <ClCompile Include="..\SoundManager.cpp" />
-    <ClCompile Include="..\Source.cpp">
+    <ClCompile Include="..\Game.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Bounds.cpp" />
@@ -32,6 +32,7 @@
     <ClInclude Include="..\Bounds.h" />
     <ClInclude Include="..\CollisionManager.h" />
     <ClInclude Include="..\Doodle.h" />
+    <ClInclude Include="..\Game.h" />
     <ClInclude Include="..\Platform.h" />
     <ClInclude Include="..\SoundManager.h" />
   </ItemGroup>

@@ -50,6 +50,8 @@ void Doodle::Move(Ogre::SceneNode* sn, Ogre::Real evt,Vector3 dir, Ogre::SceneNo
     }
     else
     {
+        if (cam->getPosition().y < sn->getPosition().y + 30)
+            MoveCamera(cam, evt);
         Vector3 tempPos = sn->getPosition();
         if ((bottomColliding || isOnPlatform) & !jumpOnPlatform)
         {
@@ -93,8 +95,7 @@ void Doodle::Move(Ogre::SceneNode* sn, Ogre::Real evt,Vector3 dir, Ogre::SceneNo
                 }
                 else
                     tempJumpSpeed += 100;
-                if (cam->getPosition().y < sn->getPosition().y)
-                    MoveCamera(cam, evt);
+                
 
             }
             else
