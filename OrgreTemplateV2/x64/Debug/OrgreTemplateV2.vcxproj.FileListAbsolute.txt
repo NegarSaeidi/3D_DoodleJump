@@ -1,0 +1,5 @@
+C:\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
+C:\GameEngineDevelopment\OrgreTemplateV2\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.pdb
+F:\T163-Term5\Hooman-Engine\2DPongOgre_Assignment1\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
+F:\T163-Term5\Hooman-Engine\2DPongOgre_Assignment1\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.pdb
+C:\Users\NEGAR\Downloads\2DPongOgre_Assignment1-main\2DPongOgre_Assignment1-main\OrgreTemplateV2\x64\Debug\OrgreTemplateV2.exe
