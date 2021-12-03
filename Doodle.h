@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SoundManager.h"
 #include "Ogre.h"
 #include <stack>
 using namespace Ogre;
@@ -20,12 +20,14 @@ public:
 	void MoveCamera(Ogre::SceneNode* sn, Ogre::Real evt);
 	bool hasCameraMoved();
 	void setCameraHasMoved(bool b);
+	bool Died = false;
+	bool hit = false;
 
 private:
 
-	float speed, gravity,jumpSpeed,doubleJump,tempSpeed;
+	float speed, gravity,jumpSpeed,doubleJump,tempJumpSpeed,tempHorizontalSpeed=0,DeadZone;
 	Vector3 position, scale,velocity;
-	bool bottomColliding, leftColliding, rightColliding,jumpOnPlatform,isOnPlatform,cameraMoved;
+	bool bottomColliding, leftColliding, rightColliding,jumpOnPlatform,isOnPlatform,cameraMoved,dead;
 
 
 };

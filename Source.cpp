@@ -35,18 +35,41 @@ class HUDFrameListener : public Ogre::FrameListener
 private:
 	OgreBites::Label* _Tpu,* _Lives,* _Score;
 	Ogre::Real lastTpu=0;
+	Doodle* _doodlePlayer;
+	int  lives=3;
+	int sc = 0;
+	SceneNode* _player,*_BottomNode;
 public:
-	HUDFrameListener(OgreBites::Label* mTpu, OgreBites::Label* mLives, OgreBites::Label* mScore)
+	HUDFrameListener(OgreBites::Label* mTpu, OgreBites::Label* mLives, OgreBites::Label* mScore,Doodle* doodle,SceneNode* sn)
 	{
 		_Tpu = mTpu;
 		_Lives = mLives;
 		_Score = mScore;
+		_doodlePlayer = doodle;
+		_player = sn;
+		
 	}
 	bool frameStarted(const Ogre::FrameEvent& evt)
 	{
 		if(Ogre::Math::Abs(lastTpu*1000-evt.timeSinceLastFrame*1000)>10)
 		_Tpu->setCaption(Ogre::StringConverter::toString(evt.timeSinceLastFrame * 1000));
 		lastTpu = evt.timeSinceLastFrame;
+		if (_doodlePlayer->Died == true)
+		{
+			if (lives > 0)
+			lives--;
+			_Lives->setCaption(Ogre::StringConverter::toString(lives));
+			_doodlePlayer->Died =false;
+		}
+		if (_doodlePlayer->hit == true)
+		{
+			sc += 20;
+			_Score->setCaption(Ogre::StringConverter::toString(sc));
+			_doodlePlayer->hit = false;
+		}
+		if (lives <= 0)
+			_player->setPosition(-2000, -2000, -2000);
+			
 		
 		return true;
 	}
@@ -70,9 +93,10 @@ public:
 
 	PlayerFrameListener(Ogre::SceneNode* PlayerNode, Ogre::SceneNode* left, Ogre::SceneNode* right, Ogre::SceneNode* bottom, Doodle* playerDoodle,Ogre::SceneNode* cam, stack<SceneNode*> sns,Ogre::Entity* pe, SceneManager* scnMgr)
 	{
-		for (int i = 0; i < 4; i++)
+		while(!sns.empty())
 		{
 			_PlatformsStack.push(sns.top());
+			
 			sns.pop();
 		}
 		
@@ -105,10 +129,11 @@ public:
 		_PlayerDoodle->Move(_PlayerNode,evt.timeSinceLastFrame,translate,_camNode);
 		if (_PlayerDoodle->hasCameraMoved())
 		{
-			//for (int i = 0; i < 2; i++)
-			//{
+		/*
+			for (int i = 0; i < 2; i++)
+			{
 				addPlatforms();
-			//}
+			}*/
 			
 			_PlayerDoodle->setCameraHasMoved(false);
 		}
@@ -117,7 +142,7 @@ public:
 		
 		return true;
 	}
-	void addPlatforms()
+	/*void addPlatforms(SceneManager* sc)
 	{
 		
 		Ogre::Entity* e = _scnMgr->createEntity("platform");
@@ -125,7 +150,7 @@ public:
 		Ogre::SceneNode* node = _scnMgr->getRootSceneNode()->createChildSceneNode(name);
 		node->attachObject(e);
 		float x = Ogre::Math::RangeRandom(-10, 10);
-		float y = Ogre::Math::RangeRandom(_PlayerNode->getPosition().y+10, _PlayerNode->getPosition().y + 20);
+		float y = Ogre::Math::RangeRandom(_PlayerNode->getPosition().y, _PlayerNode->getPosition().y + 6);
 		float z = 20;
 		node->setPosition(Vector3(x,y,z));
 		node->setScale(8, 1, 4);
@@ -134,7 +159,7 @@ public:
 		index++ ;
 	 
 		
-	}
+	}*/
 };
 
 class OgreTutorial
@@ -209,7 +234,7 @@ void OgreTutorial::setup()
 	createScene();
 	createCamera();
 	createFrameListener();
-	
+ 
 
 }
 
@@ -251,7 +276,24 @@ bool OgreTutorial::keyPressed(const KeyboardEvent& evt)
 	}
 	return true;
 }
+SceneNode* addPlatforms(SceneManager* _scnMgr, int index)
+{
 
+	Ogre::Entity* e = _scnMgr->createEntity("platform");
+	string name = "PlatfromNode" + Ogre::StringConverter::toString(index);
+	Ogre::SceneNode* node = _scnMgr->getRootSceneNode()->createChildSceneNode(name);
+	node->attachObject(e);
+	float x = Ogre::Math::RangeRandom(-10, 10);
+	float y = 10 + (12 * index);
+	float z = 20;
+	node->setPosition(Vector3(x, y, z));
+	node->setScale(8, 1, 4);
+	
+
+
+	return node;
+
+}
 void OgreTutorial::createScene()
 {
 	// -- tutorial section start --
@@ -302,25 +344,44 @@ void OgreTutorial::createScene()
 	mTpu = mTrayMgr->createLabel(TL_TOPRIGHT, "tpu", "0", 150);
 
 	mLivesLabel = mTrayMgr->createLabel(TL_TOPLEFT, "Lives", "Lives:", 150);
-	mLives = mTrayMgr->createLabel(TL_TOPLEFT, "lives", "5", 150);
+	mLives = mTrayMgr->createLabel(TL_TOPLEFT, "lives", "3", 150);
 
 	CreateBounds();
 	
-	generatePlatforms();
+	//generatePlatforms();
+	DoodlePlatform1 = new Platform();
+	Ogre::ManualObject* ManualObj = new ManualObject("Cube");
+	DoodlePlatform1->CreateShape(ManualObj, "MyMaterial1");
+	Ogre::Entity* p1 = scnMgr->createEntity("platform");
+	PlatformNode1 = scnMgr->getRootSceneNode()->createChildSceneNode("PlatformNode1");
+	PlatformNode1->attachObject(p1);
+	DoodlePlatform1->setPosition(Vector3(5, 10, 20));
+	PlatformNode1->setPosition(DoodlePlatform1->getPosition());
+	PlatformNode1->setScale(8, 1, 4);
+	//SceneNodesArray[0] = PlatformNode1;
+	SceneNodesStack.push(PlatformNode1);
 	
+
+	for (int i = 1; i < 100; i++)
+	{
+		SceneNodesStack.push(addPlatforms(scnMgr, i));
+	}
+
 	player = new Doodle();
 	Entity* ent = scnMgr->createEntity("Sinbad.mesh");
 	ent->setCastShadows(false);
 	SinbadNode = scnMgr->createSceneNode("Character");
 	SinbadNode->attachObject(ent);
 	scnMgr->getRootSceneNode()->addChild(SinbadNode);
-	SinbadNode->setPosition(Ogre::Vector3(6.01f, 4.51f, 22.8f));
+	SinbadNode->setPosition(Ogre::Vector3(0.01f, 6.f, 22.8f));
 	SinbadNode->setScale(0.8f, 0.8f, 0.8f);
 
 	
-	platformEntity = scnMgr->createEntity("platform");
+	//platformEntity = scnMgr->createEntity("platform");
+
+
 	scnMgr->setSkyBox(true, "DoodleBackground", 500, false);
-	cout << "............" + Ogre::StringConverter::toString(SoundManager::Instance()->playSound("l;")) << endl;
+	
 }
 
 void OgreTutorial::generatePlatforms()
@@ -419,7 +480,7 @@ void OgreTutorial::createCamera()
 	cam->setAutoAspectRatio(true);
 
 	camNode->attachObject(cam);
-	camNode->setPosition(0,30, 100);
+	camNode->setPosition(0,25, 100);
 	camNode->lookAt(Ogre::Vector3(0, -10, -40), Node::TS_WORLD);
 
 	// and tell it to render into the main window
@@ -432,11 +493,12 @@ void OgreTutorial::createCamera()
 
 void OgreTutorial::createFrameListener()
 {
+	
 
 	Ogre::FrameListener* FrameListener1 = new PlayerFrameListener(SinbadNode, LeftNode, RightNode, BottomNode, player, camNode, SceneNodesStack, platformEntity, scnMgr);
 	mRoot->addFrameListener(FrameListener1);
 
-	Ogre::FrameListener* FrameListener2 = new HUDFrameListener(mTpu,mLives,mScore);
+	Ogre::FrameListener* FrameListener2 = new HUDFrameListener(mTpu,mLives,mScore,player,SinbadNode);
 	mRoot->addFrameListener(FrameListener2);
 }
 

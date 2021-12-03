@@ -16,7 +16,7 @@
  * @return no return
  */
 
-Doodle::Doodle() : position(100, 100, 0), scale(0.1f, 0.1f, 0.1f),speed(20.0f),gravity(-5),isFalling(false),jumpSpeed(350),doubleJump(450)
+Doodle::Doodle() : position(100, 100, 0), scale(0.1f, 0.1f, 0.1f),speed(40.0f),gravity(-5),isFalling(false),jumpSpeed(350),doubleJump(500)
 {
     bottomColliding = false;
     leftColliding = false;
@@ -24,7 +24,7 @@ Doodle::Doodle() : position(100, 100, 0), scale(0.1f, 0.1f, 0.1f),speed(20.0f),g
     jumpOnPlatform = false;
     isOnPlatform = false;
     cameraMoved = false;
-    tempSpeed = 0;
+    tempJumpSpeed = 0;
    
 }
 Doodle::~Doodle()
@@ -41,63 +41,74 @@ Vector3 Doodle::getScale()
 
 void Doodle::Move(Ogre::SceneNode* sn, Ogre::Real evt,Vector3 dir, Ogre::SceneNode* cam)
 {
-  
-    Vector3 tempPos = sn->getPosition();
-    if ((bottomColliding || isOnPlatform) & !jumpOnPlatform)
+    if (sn->getPosition().y<DeadZone)
     {
-        tempPos += (Vector3(0, 1, 0)) * evt * jumpSpeed;
-        //sn->translate((Vector3(0, 1, 0)) * evt * jumpSpeed);
-    }
-    if (isFalling & !jumpOnPlatform)
-    {
-       // sn->translate((Vector3(0, 1, 0)) * evt * gravity);
-       tempPos += (Vector3(0, 1, 0)) * evt * gravity;
+        Died = true;
+        sn->setPosition(3, sn->getPosition().y+30,22.8);
+     
+     
     }
     else
     {
-       
-        if (leftColliding)
+        Vector3 tempPos = sn->getPosition();
+        if ((bottomColliding || isOnPlatform) & !jumpOnPlatform)
         {
-            if (dir.x > 0)
-            {
-                tempPos += dir * evt * speed;
-               // sn->translate(dir * evt * speed);
-            }
+            tempPos += (Vector3(0, 1, 0)) * evt * jumpSpeed;
+            //sn->translate((Vector3(0, 1, 0)) * evt * jumpSpeed);
         }
-        else if (rightColliding)
+        else if (isFalling & !jumpOnPlatform)
         {
-            if (dir.x < 0)
-            {//sn->translate(dir * evt * speed);
-                tempPos += dir * evt * speed;
-            }
-        }
-        else if (jumpOnPlatform)
-        {
-            
-            //sn->translate(Vector3(0,1,0) * evt * doubleJump);
-            tempPos += Vector3(0, 1, 0) * evt * speed;
-            cam->translate(Vector3(0, 1, 0) * evt * speed*2);
-            if (tempSpeed >= doubleJump)
-            {
-                jumpOnPlatform = false;
-                tempSpeed = speed;
-                cameraMoved = true;
-            }
-            else
-                tempSpeed += 100;
-       
+            // sn->translate((Vector3(0, 1, 0)) * evt * gravity);
+            tempPos += (Vector3(0, 1, 0)) * evt * gravity;
         }
         else
         {
-            tempPos += dir * evt * speed;
+
+            if (leftColliding)
+            {
+                if (dir.x > 0)
+                {
+                    tempPos += dir * evt * speed;
+                    // sn->translate(dir * evt * speed);
+                }
+            }
+            else if (rightColliding)
+            {
+                if (dir.x < 0)
+                {//sn->translate(dir * evt * speed);
+                    tempPos += dir * evt * speed;
+                }
+            }
+            else if (jumpOnPlatform)
+            {
+
+                //sn->translate(Vector3(0,1,0) * evt * doubleJump);
+                tempPos += Vector3(0, 1, 0) * evt * speed;
+                if (tempJumpSpeed >= doubleJump)
+                {
+                    jumpOnPlatform = false;
+                    tempJumpSpeed = speed;
+                    cameraMoved = true;
+                    
+                }
+                else
+                    tempJumpSpeed += 100;
+                if (cam->getPosition().y < sn->getPosition().y)
+                    MoveCamera(cam, evt);
+
+            }
+            else
+            {
+               
+                tempPos += dir * evt * speed;
                 //sn->translate(dir * evt * speed);
 
-        }
-       
-    }
-    sn->setPosition(tempPos);
-  
+            }
 
+        }
+        sn->setPosition(tempPos);
+
+    }
   
 }
 
@@ -151,22 +162,25 @@ void Doodle::onPlatform(Ogre::SceneNode* playerNode, stack<Ogre::SceneNode*> pla
         if ((CollisionManager::Instance()->checkCollision(playerNode, platforms.top())))
         {
            
-           
             if (playerNode->getPosition().y < platforms.top()->getPosition().y)
-            {
-               
-                jumpOnPlatform = true;
-              
-              
-            }
+                {
 
-   
-            else
-            {
-                if(!jumpOnPlatform)
-                flag = true;
+                    jumpOnPlatform = true;
+                    hit = true;
+                  //SoundManager::Instance()->playSound("l;");
+                }
 
-            }
+
+                else
+                {
+                if (!jumpOnPlatform)
+                {
+                    flag = true;
+                    DeadZone = platforms.top()->getPosition().y;
+                }
+
+                }
+          
 
 
         }
